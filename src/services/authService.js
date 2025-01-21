@@ -14,6 +14,8 @@ module.exports = {
         // Mã hóa mật khẩu
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        
+
         // Lưu tài khoản mới vào cơ sở dữ liệu
         await Account.create({
             username,
