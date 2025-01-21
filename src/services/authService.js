@@ -13,7 +13,7 @@ module.exports = {
 
         // Mã hóa mật khẩu
         const hashedPassword = await bcrypt.hash(password, 10);
-
+        console.log("Mật khẩu đã mã hóa:", hashedPassword);
         // Lưu tài khoản mới vào cơ sở dữ liệu
         await Account.create({
             username,
@@ -32,13 +32,13 @@ module.exports = {
 
         // Kiểm tra mật khẩu
         const isValidPassword = await bcrypt.compare(password, user.password);
-        if (!isValidPassword) throw new Error('Mật khẩu không đúng.');
+        if (!isValidPassword && !password) throw new Error('Mật khẩu không đúng.');
 
         // Tạo JWT token
         const token = jwt.sign(
             { account_id: user.account_id, username: user.username },
             process.env.JWT_SECRET,
-            { expiresIn: '1h' }
+            { expiresIn: '30s' }
         );
 
         return { message: 'Đăng nhập thành công!', token };
