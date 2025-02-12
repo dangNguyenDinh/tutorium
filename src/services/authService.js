@@ -3,6 +3,9 @@ const jwt = require('jsonwebtoken');
 const Account = require('../models/accounts');
 require('dotenv').config();
 
+//
+const tokenBlackList = new Set();
+
 module.exports = {
     register: async (data) => {
         const { username, password, email, role_account } = data;
@@ -42,5 +45,19 @@ module.exports = {
         );
 
         return { message: 'Đăng nhập thành công!', token };
+    },
+
+    logout: async (token) => {
+        if(!token){
+            throw new Error('token khong duoc cung cap');
+        }
+
+        tokenBlackList.add(token);
+        return { message: 'Đăng xuất thành công!' };
+    },
+
+      // Hàm kiểm tra xem token có trong danh sách đen không
+      isTokenBlacklisted: (token) => {
+        return tokenBlackList.has(token);
     },
 };
